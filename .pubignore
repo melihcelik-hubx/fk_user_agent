@@ -1,0 +1,6 @@
+build/
+.idea/
+*.iml
+*.bak
+firebase-debug.log
+example/ios/Flutter/ephemeral/

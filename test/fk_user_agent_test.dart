@@ -1,3 +1,4 @@
+import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,17 +7,72 @@ void main() {
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  late int invocationCount;
+
+  Map<String, dynamic> responseForCall(int callNumber) {
+    return <String, dynamic>{
+      'userAgent': 'agent-$callNumber',
+      'webViewUserAgent': 'web-$callNumber',
+      'buildNumber': '$callNumber',
+    };
+  }
+
   setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
+    invocationCount = 0;
+    FkUserAgent.release();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
+      expect(methodCall.method, 'getProperties');
+      invocationCount += 1;
+      return responseForCall(invocationCount);
     });
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    FkUserAgent.release();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
   });
 
-  test('getPlatformVersion', () async {
-    // expect(await FkUserAgent.platformVersion, '42');
+  test('init caches properties and populates getters', () async {
+    await FkUserAgent.init();
+    await FkUserAgent.init();
+
+    expect(invocationCount, 1);
+    expect(FkUserAgent.userAgent, 'agent-1');
+    expect(FkUserAgent.webViewUserAgent, 'web-1');
+    expect(FkUserAgent.getProperty('buildNumber'), '1');
+  });
+
+  test('force init refetches native properties', () async {
+    await FkUserAgent.init();
+    await FkUserAgent.init(force: true);
+
+    expect(invocationCount, 2);
+    expect(FkUserAgent.userAgent, 'agent-2');
+  });
+
+  test('release clears cached properties', () async {
+    await FkUserAgent.init();
+
+    FkUserAgent.release();
+
+    expect(FkUserAgent.properties, isNull);
+  });
+
+  test('getPropertyAsync initializes lazily', () async {
+    final dynamic buildNumber = await FkUserAgent.getPropertyAsync('buildNumber');
+
+    expect(invocationCount, 1);
+    expect(buildNumber, '1');
+  });
+
+  test('properties map is unmodifiable', () async {
+    await FkUserAgent.init();
+
+    expect(
+      () => FkUserAgent.properties!['anotherKey'] = 'value',
+      throwsUnsupportedError,
+    );
   });
 }
