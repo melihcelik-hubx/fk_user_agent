@@ -13,7 +13,7 @@ class FkUserAgent {
   ///
   /// Set [force] to true if you want to refetch the user agent properties from
   /// the native platform.
-  static Future init({force: false}) async {
+  static Future<void> init({bool force = false}) async {
     if (_properties == null || force) {
       _properties = Map.unmodifiable(await (_channel.invokeMethod('getProperties')));
     }
@@ -41,7 +41,7 @@ class FkUserAgent {
   }
 
   /// Fetch a [property] asynchronously that can be used to build your own user agent string.
-  static dynamic getPropertyAsync(String property) async {
+  static Future<dynamic> getPropertyAsync(String property) async {
     await init();
     return _properties![property];
   }

@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await FkUserAgent.init();
       initPlatformState();
     });
@@ -50,12 +50,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
+        appBar: AppBar(title: const Text('Plugin example app')),
+        body: Center(child: Text('Running on: $_platformVersion\n')),
       ),
     );
   }

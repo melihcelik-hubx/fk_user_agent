@@ -7,6 +7,10 @@
 
 Retrieve Android/iOS device user agents in Flutter.
 
+iOS now supports both Swift Package Manager and CocoaPods.
+
+This release raises the minimum supported toolchain to Dart 3.11+, Flutter 3.41+, and iOS 13+.
+
 ### Example user-agents:
 
 | System | User-Agent | WebView User-Agent |
