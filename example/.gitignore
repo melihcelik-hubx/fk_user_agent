@@ -44,3 +44,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Flutter iOS — generated per-build, may contain absolute local paths / OAuth metadata
+ios/Flutter/ephemeral/
+ios/Flutter/flutter_export_environment.sh
+
+# Firebase debug log — contains developer email and OAuth metadata
+firebase-debug.log

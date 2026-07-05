@@ -7,3 +7,13 @@
 build/
 .build/
 .swiftpm/
+
+# Firebase — contains developer email, OAuth metadata, internal endpoints
+firebase-debug.log
+
+# IntelliJ/IDE backup and generated files
+*.bak
+.idea/
+
+# Flutter iOS ephemeral (generated per-build, may contain absolute local paths)
+example/ios/Flutter/ephemeral/
