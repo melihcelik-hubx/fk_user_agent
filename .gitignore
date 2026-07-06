@@ -13,6 +13,7 @@ firebase-debug.log
 
 # IntelliJ/IDE backup and generated files
 *.bak
+*.iml
 .idea/
 
 # Flutter iOS ephemeral (generated per-build, may contain absolute local paths)
